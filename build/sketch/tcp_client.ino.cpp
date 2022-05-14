@@ -1,3 +1,5 @@
+#include <Arduino.h>
+#line 1 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
 #include "SoftwareSerial.h"
 #include "TinyGPSPlus.h"
 #include "AltSoftSerial.h"
@@ -16,6 +18,21 @@ TinyGPSPlus gps;
 unsigned long previousMillis = 0;
 long interval = 60000;
 
+#line 19 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+void setup();
+#line 40 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+void loop();
+#line 55 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+int sendGpsToServer();
+#line 96 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+void sendDataToServer(String latitude, String longitude);
+#line 104 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+int readDataFromServer();
+#line 109 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout);
+#line 148 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+int getGeoFenceStatus();
+#line 19 "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
 void setup()
 {
   //Begin serial communication with Arduino and Arduino IDE (Serial Monitor)
@@ -81,6 +98,12 @@ int sendGpsToServer()
       Serial.print(latitude);
       Serial.print(" Longitude= "); 
       Serial.println(longitude);
+      //if (latitude == 0) {return 0;}
+      String url, temp;
+      url = "http://ENTER_YOUR_WEBSITE/gpsdata.php?lat=";
+      url += latitude;
+      url += "&lng=";
+      url += longitude;
 
       sendDataToServer(latitude, longitude);
   }
@@ -89,78 +112,10 @@ int sendGpsToServer()
 
 void sendDataToServer(String latitude, String longitude) {
     String url;
-    url = "GET /update?api_key=UBKWDZUZJ01YHYQ5&field1=";
-    url += latitude;
-    url += "&field2=";
-    url += longitude;
-    url += "\r\n\x1a";
-
-    Serial.println("TCP Send :");
-    Serial.print("AT\\r\\n");
-    SIM900.println("AT"); /* Check Communication */
-    delay(5000);
-    ShowSerialData();	/* Print response on the serial monitor */
-    delay(5000);
-    Serial.print("AT+CIPMODE=0\\r\\n");
-    SIM900.println("AT+CIPMODE=0");	/* Non-Transparent (normal) mode for TCP/IP application */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CIPMUX=0\\r\\n");
-    SIM900.println("AT+CIPMUX=0");	/* Single TCP/IP connection mode */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CGATT=1\\r\\n");
-    SIM900.println("AT+CGATT=1");	/* Attach to GPRS Service */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CREG?\\r\\n");
-    SIM900.println("AT+CREG?");	/* Network registration status */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CGATT?\\r\\n");
-    SIM900.println("AT+CGATT?");	/* Attached to or detached from GPRS service */ 
-    delay(5000); 
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CSTT=\"airtelgprs.com\",\"\",\"\"\\r\\n");
-    SIM900.println("AT+CSTT=\"airtelgprs.com\",\"\",\"\"");	/* Start task and set APN */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CIICR\\r\\n");
-    SIM900.println("AT+CIICR");	/* Bring up wireless connection with GPRS */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CIFSR\\r\\n");
-    SIM900.println("AT+CIFSR");	/* Get local IP address */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",\"80\"\\r\\n");
-    SIM900.println("AT+CIPSTART=\"TCP\",\"api.thingspeak.com\",\"80\"");	/* Start up TCP connection */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CIPSEND\\r\\n");
-    SIM900.println("AT+CIPSEND");	/* Send data through TCP connection */
-    delay(2000);
-    ShowSerialData();
-    delay(2000);
-    Serial.print("Send coordinates to the server");
-    SIM900.print(url);	/* URL for data to be sent to */
-    delay(10000);
-    ShowSerialData();
-    delay(5000);
-    Serial.print("AT+CIPSHUT\\r\\n");
-    SIM900.println("AT+CIPSHUT");	/* Deactivate GPRS PDP content */
-    delay(5000);
-    ShowSerialData();
-    delay(5000);
+      url = "http://ENTER_YOUR_WEBSITE/gpsdata.php?lat=";
+      url += latitude;
+      url += "&lng=";
+      url += longitude;
 }
 
 int readDataFromServer() {
@@ -168,13 +123,8 @@ int readDataFromServer() {
     return 0;
 }
 
-void ShowSerialData()
-{
-    while(SIM900.available()!=0)	/* If data is available on serial port */
-    Serial.write(char (SIM900.read()));	/* Print character received on to the serial monitor */
-}
-
 int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeout){
+
     uint8_t x=0,  answer=0;
     char response[100];
     unsigned long previous;
@@ -182,8 +132,10 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
     //Initialice the string
     memset(response, '\0', 100);
     delay(100);
+    
     //Clean the input buffer
     while( sim900l.available() > 0) sim900l.read();
+    
     if (ATcommand[0] != '\0'){
       //Send the AT command 
       sim900l.println(ATcommand);
@@ -213,3 +165,4 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
 int getGeoFenceStatus() {
 
 }
+

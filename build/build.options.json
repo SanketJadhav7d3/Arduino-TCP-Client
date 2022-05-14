@@ -1,0 +1,12 @@
+{
+  "additionalFiles": "..",
+  "builtInLibrariesFolders": "/Applications/Arduino.app/Contents/Java/libraries",
+  "builtInToolsFolders": "",
+  "compiler.optimization_flags": "",
+  "customBuildProperties": "build.warn_data_percentage=75",
+  "fqbn": "arduino:avr:uno",
+  "hardwareFolders": "/Users/sanketjadhav/Library/Arduino15/packages",
+  "otherLibrariesFolders": "/Users/sanketjadhav/Documents/Arduino/libraries",
+  "runtime.ide.version": "10607",
+  "sketchLocation": "/Users/sanketjadhav/Documents/Arduino/tcp_client/tcp_client.ino"
+}

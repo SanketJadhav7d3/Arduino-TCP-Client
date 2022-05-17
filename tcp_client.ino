@@ -5,7 +5,8 @@
 
 #define rxPin 2
 #define txPin 3
-SoftwareSerial sim900(rxPin,txPin); 
+
+SoftwareSerial sim900(rxPin,txPin);
 
 //GPS Module RX pin to Arduino 9
 //GPS Module TX pin to Arduino 8
@@ -14,12 +15,13 @@ AltSoftSerial neogps;
 TinyGPSPlus gps;
 
 unsigned long previousMillis = 0;
+int geoFenceStatus = 0;
 long interval = 60000;
 
 void setup()
 {
   //Begin serial communication with Arduino and Arduino IDE (Serial Monitor)
-  Serial.begin(115200);
+  Serial.begin(115200); 
 
   //Begin serial communication with Arduino and sim900
   sim900.begin(9600);
@@ -49,6 +51,8 @@ void loop()
         previousMillis = currentMillis;
         sendGpsToServer();
     }
+    // read the geofence status from the server
+    readDataFromServer();
 }
 
 int sendGpsToServer()
@@ -64,7 +68,7 @@ int sendGpsToServer()
       }
     }
     //If newData is true
-    if(true){
+    if(newData){
         newData = false;
         String latitude, longitude;
         float altitude;
@@ -153,7 +157,7 @@ void sendDataToServer(String latitude, String longitude, String rotY) {
     delay(2000);
     ShowSerialData();
     delay(2000);
-    Serial.print("Send coordinates to the server");
+    Serial.print("Sending coordinates to the server");
     sim900.print(url);	/* URL for data to be sent to */
     delay(10000);
     ShowSerialData();
@@ -250,7 +254,7 @@ int8_t sendATcommand(char* ATcommand, char* expected_answer, unsigned int timeou
     memset(response, '\0', 100);
     delay(100);
     //Clean the input buffer
-    while( sim900.available() > 0) sim900l.read();
+    while( sim900.available() > 0) sim900.read();
     if (ATcommand[0] != '\0'){
       //Send the AT command 
       sim900.println(ATcommand);

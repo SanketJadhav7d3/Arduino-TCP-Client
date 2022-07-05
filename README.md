@@ -6,7 +6,7 @@ Arduino TCP Client code.
 ## Components used
 
 * Arduino Uno
-![Arduino Uno][./Arduino\ Uno.png]
+![Arduino Uno][./images/ArduinoUno.jpg]
 * GSM SIM 900A
 * Ublox Neo 6m GPS
 

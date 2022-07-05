@@ -3,6 +3,8 @@
 
 Arduino TCP Client code.
 
+- Sends GPS sensor values to Thingspeak server.
+
 ## Components used
 
 * Arduino Uno
@@ -13,3 +15,6 @@ Arduino TCP Client code.
 ![GPS Module](./images/GPS.jpg?raw=true)
 
 
+
+## Note
+    - Connection details are in the code.

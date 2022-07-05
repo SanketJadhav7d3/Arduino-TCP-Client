@@ -6,10 +6,12 @@
 #define rxPin 2
 #define txPin 3
 
+// GSM Module RX pin to Arduino 3
+// GSM Module TX pin to Arduino 2
 SoftwareSerial sim900(rxPin,txPin);
 
-//GPS Module RX pin to Arduino 9
-//GPS Module TX pin to Arduino 8
+// GPS Module RX pin to Arduino 9
+// GPS Module TX pin to Arduino 8
 AltSoftSerial neogps;
 
 TinyGPSPlus gps;

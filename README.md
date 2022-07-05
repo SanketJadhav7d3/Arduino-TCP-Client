@@ -14,7 +14,6 @@ Arduino TCP Client code.
 * Ublox Neo 6m GPS
 ![GPS Module](./images/GPS.jpg?raw=true)
 
-
-** Note **
+**Note**
 
 - Connection details are in the code.

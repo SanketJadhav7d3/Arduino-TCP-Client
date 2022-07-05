@@ -15,6 +15,6 @@ Arduino TCP Client code.
 ![GPS Module](./images/GPS.jpg?raw=true)
 
 
+** Note **
 
-## Note
-    - Connection details are in the code.
+- Connection details are in the code.
